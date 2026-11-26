@@ -1,197 +1,95 @@
 # lanshu-create-ai-presenter-video
 
-**English** | [简体中文](README.zh-CN.md)
+**English** · [简体中文](README.zh-CN.md)
 
-[![Agent Skills](https://img.shields.io/badge/Agent_Skills-SKILL.md-111827)](https://agentskills.io)
-![Harness Neutral](https://img.shields.io/badge/Harness-Neutral-8B5CF6)
-![Provider Neutral](https://img.shields.io/badge/Provider-Neutral-0EA5E9)
-![Routes: Presenter | Styled](https://img.shields.io/badge/Routes-Presenter_%7C_Styled-0EA5E9)
-[![Explainer Styles: 12](https://img.shields.io/badge/Explainer_Styles-12-E8590C)](explainer/STYLES.md)
-[![Rendered with HyperFrames](https://img.shields.io/badge/Rendered_with-HyperFrames-2563EB)](https://hyperframes.heygen.com)
-<br>
-[![Validate Skill](https://github.com/cclank/lanshu-create-ai-presenter-video/actions/workflows/validate.yml/badge.svg)](https://github.com/cclank/lanshu-create-ai-presenter-video/actions/workflows/validate.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-F4C430.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/cclank/lanshu-create-ai-presenter-video)](https://github.com/cclank/lanshu-create-ai-presenter-video/releases/latest)
-[![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![FFmpeg Required](https://img.shields.io/badge/FFmpeg-Required-007808?logo=ffmpeg&logoColor=white)](https://ffmpeg.org/)
-[![Node.js for the styled route](https://img.shields.io/badge/Node.js-styled_route-5FA04E?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![GitHub stars](https://img.shields.io/github/stars/cclank/lanshu-create-ai-presenter-video?style=flat)](https://github.com/cclank/lanshu-create-ai-presenter-video/stargazers)
-<br>
-[![X @LufzzLiz](https://img.shields.io/badge/X-@LufzzLiz-000000?logo=x&logoColor=white)](https://x.com/LufzzLiz)
-[![Author: 岚叔 Lanshu](https://img.shields.io/badge/Author-%E5%B2%9A%E5%8F%94_Lanshu-C2410C)](https://x.com/LufzzLiz)
+[![Agent Skill][skill-badge]](SKILL.md) [![Release][release-badge]][latest-release] [![Validate Skill][ci-badge]][ci] [![License: MIT][license-badge]](LICENSE) [![GitHub stars][stars-badge]][stargazers]
 
-> Turn a topic or script into a verified, publish-ready explainer video — presented by a digital human from one authorized portrait, or acted out on screen in one of twelve explainer styles — driven by the coding agent you already use.
+Turn a topic or script into an explainer video with the coding agent you already use. Give it one authorized portrait for a digital presenter with synced captions and animated keywords, or choose one of twelve styles for an animated explainer.
 
-`lanshu-create-ai-presenter-video` is an [Agent Skill](https://agentskills.io) that takes an AI agent through the full production of an explainer video. On the **presenter route** that means script, narration, presenter generation, lip-sync, captions and keyword motion graphics, editing, rendering, and quality assurance. On the **styled route** the narration is performed scene by scene in one of twelve styles (nine visual, three narrative), from a word-timed story to a rendered film. Every stage is gated by evidence on disk, and nothing is delivered until the output passes decode and loudness checks.
+## AI presenter demo
 
-## Highlights
+[![Cover of the original 30-second AI presenter demo](https://lanshuagent.com/media/2090436108115136643-yEcbdXq1vqOmVYK3.webp)](https://lanshuagent.com/works/presenter-video/)
 
-- **Harness-neutral.** A standard `SKILL.md` that loads in Claude Code, Codex, Gemini CLI, Cursor, OpenCode, GitHub Copilot, and other Agent Skills clients. Any agent that can read files and run shell commands can follow it directly.
-- **Provider-neutral.** On the presenter route, voice, presenter video, lip-sync, and speech recognition are selected by capability at run time; each job records the provider, model, parameters, and task IDs it actually used. The styled route voices with MiniMax (word timestamps come from the voice engine) or takes narration you voiced or recorded elsewhere.
-- **Twelve performed explainer styles.** Nine visual styles — editorial, tech HUD, notebook, paper pop-up, pop comic, 3D one-take, drafting sheet, chalkboard, and clay town — plus three narrative styles: derivation, casefile, and life-scene sitcom. Each has a reusable kit, starter, and example project.
-- **Audio-locked timeline.** The approved narration is the master clock for presenter motion, captions, cuts, and final duration, which keeps lip-sync and scene boundaries aligned.
-- **Evidence-gated workflow.** Eight production states, from `intake` to `verified`, computed from artifacts instead of declared by hand.
-- **Cost guardrails.** Pilot-first generation, an explicit billing statement before the first paid call, retry ceilings, and task-ID recovery to avoid duplicate charges.
-- **Verified delivery.** Master and share encodes are fully decoded and loudness-checked before any file is published.
+[Watch the original 30-second demo](https://lanshuagent.com/media/2090436108115136643-yEcbdXq1vqOmVYK3.mp4) · [Launch post on X](https://x.com/LufzzLiz/status/2090436108115136643)
+
+[Two routes](#two-routes) · [Installation](#installation) · [Quick start](#quick-start) · [Style gallery](#style-gallery) · [Reference guides](#reference-guides)
 
 ## Two routes
 
-| Route | The video | You provide | Paid generation | Format |
-|---|---|---|---|---|
-| **Presenter** | A digital human presents; captions and keyword graphics support it | Topic or script + authorized portrait | Voice + presenter video | Any; 9:16 by default |
-| **Styled explainer** | No presenter: every narrated phrase is acted out on screen in one of twelve styles (nine visual, three narrative) | Topic or script (or your own recorded narration) | Voice only (none with your own narration) | 16:9 |
+| Route | What you provide | What you get | Paid generation | Format |
+| --- | --- | --- | --- | --- |
+| **AI presenter** | A topic or script and an authorized portrait of one adult | A talking presenter with lip-sync, synced captions, and animated keyword graphics | Voice and presenter video, depending on the providers you use | Default 9:16, with other aspect ratios available |
+| **Styled explainer** | A topic or script, with optional recorded narration | Animated scenes timed to the narration in one of twelve styles | MiniMax voice generation if used | 16:9 |
 
-The agent infers the route from your request or asks once, with the style gallery. All styles share one contract —
-word-timed captions, chapter chips, a performed closing line, a one-frame recap. Nine are visual styles that differ in
-how ideas are acted out: editorial paper, tech HUD, notebook and pen, paper pop-up book, pop comic, 3D one-take,
-drafting sheet, chalkboard, and a clay town. Below is the same moment of the bundled KV cache explainer in all nine:
+The agent can infer the route from the request and show the style gallery when you want to compare options. The [styled explainer guide](references/styled-explainer.md#optional-bringing-a-digital-human-into-a-styled-film) also shows how to feature a presenter in a styled film.
 
-![The same moment of the KV cache explainer in nine styles](explainer/gallery/nine-styles-kv-cache.jpg)
+### Optional inputs
 
-Three are narrative styles, where the look comes with a way of telling and the script can draw on its suggested arc: **推演**
-(derive it on one canvas, formulas and geometry bound by colour), **案卷** (investigate it on an evidence board, from the
-anomaly to the closed case) and **小剧场** (a life-scene sitcom: a misconception, a bill or a queue that shows the cause,
-one sentence that maps the analogy to the real term). Below is the same KV cache topic told the three ways:
-
-![The KV cache topic told in the three narrative styles](explainer/gallery/three-narrative-styles-kv-cache.jpg)
-
-A new topic becomes a playable draft in any style in a few commands — narration, word timing, captions, chapters,
-closing line, recap, and sound are generated; the agent then performs each line's scene. See
-[`explainer/STYLES.md`](explainer/STYLES.md) to choose a style and
-[`references/styled-explainer.md`](references/styled-explainer.md) for the workflow — including an optional method for
-bringing your digital human into a styled film.
-
-## What you provide
-
-| Input | Required | Notes |
-|---|---|---|
-| Topic or finished script | Yes | A topic becomes a 45–75 second script; a supplied script keeps its natural length. |
-| Presenter image | Presenter routes | One clear adult presenter, with confirmed rights to use the image. Not needed for the styled explainer. |
-| Voice sample | No | Used only with explicit cloning authorization; otherwise a stock voice is selected and recorded. |
-| Supporting media | No | Screen recordings, images, B-roll, or brand assets, used where they prove or clarify a spoken point. |
-| Delivery preferences | No | Platform, duration, aspect ratio, style, watermark, music, and call to action. |
-
-## How it works
-
-Presenter route:
-
-```text
-Topic or script + authorized portrait
-        │
-        ▼
-Lock script and full narration ──► narration becomes the master clock
-        │
-        ▼
-Low-cost presenter pilot
-        │
-        ▼
-Presenter generation (split at real pauses when a provider caps duration)
-        │
-        ▼
-Audio-driven edit: captions, keyword graphics, cover, close
-        │
-        ▼
-Technical and visual QA
-        │
-        ▼
-Master, share copy, contact sheet, and delivery report
-```
-
-Styled route:
-
-```text
-Topic or script ──► choose a style (menu + galleries, or drafts in the nine visual styles)
-        │
-        ▼
-Script written for the style ──► voice with word timestamps (or your own narration)
-        │
-        ▼
-Draft film from the style's starter: captions, chapters, closing line, recap, sound
-        │
-        ▼
-Storyboard ──► every line performed on screen, on its words
-        │
-        ▼
-QA (check, stillness, cover) ──► render ──► master, share copy, subtitles, delivery report
-```
-
-Each state requires evidence before a job may advance. `check_state.py` computes the state from the job's artifacts:
-
-| State | Evidence required |
-|---|---|
-| `intake` | Job created |
-| `content_locked` | Passing preflight report, script, beat sheet |
-| `audio_locked` | Decodable final narration, ASR report |
-| `visual_plan_locked` | Timeline, storyboard, approved plan |
-| `presenter_generated` | Recorded presenter capability, selected video, visual review |
-| `composition_checked` | Composition report |
-| `rendered` | Decodable render with video and audio |
-| `verified` | Master, share copy, and a delivery report with passing output loudness |
-
-On the styled route, `audio_locked` also needs a voiced `story.json` (a `--dry` draft never counts), and
-`presenter_generated` is reached by the performed film and its visual review instead of a presenter video.
+- **Recorded narration** can serve as the final voice track on either route. A voice sample is for cloning and requires explicit authorization.
+- **Supporting media** can include screen recordings, images, B-roll, and brand assets.
+- **Delivery preferences** can include platform, duration, aspect ratio, visual treatment, watermark, music, and call to action.
 
 ## Requirements
 
-- An Agent Skills harness, or any coding agent that can read files and run shell commands.
-- Python 3.9+, FFmpeg with `ffprobe`, Bash, `jq`, `awk`, and `sed`.
-- For the presenter route: access to at least one voice synthesis, presenter video generation, and lip-sync capability — a cloud CLI, an API, or a local model — and optionally a deterministic timeline compositor such as HyperFrames for captions, motion graphics, and final rendering.
-- For the styled explainer: Node.js (HyperFrames runs with `npx`), `rsync`, Python with `numpy` (sound bed; point
-  `PYTHON` at it), and a MiniMax API key (`MINIMAX_API_KEY`) for the voice and its word timestamps — or your own
-  recorded narration.
+- An Agent Skills client such as Claude Code, Codex, Gemini CLI, Cursor, OpenCode, or GitHub Copilot. Any coding agent that can read files and run shell commands can also follow [SKILL.md](SKILL.md) directly.
+- Python 3.9+, Bash, FFmpeg with `ffprobe`, `jq`, `awk`, and `sed`.
+- **AI presenter** uses voice, presenter video, lip-sync, and speech recognition capabilities available in your environment. A cloud CLI, an API, or local models can provide them. Use an available compositor such as HyperFrames for editing and rendering.
+- **Styled explainer** uses Node.js with `npx`, `rsync`, Python with `numpy` for sound, and network access for fonts. Set `PYTHON` to select the interpreter if needed. Set `MINIMAX_API_KEY` for narration with word timestamps, or use a recording with matching script text. With a recording, the tool estimates word timing.
 
 ## Installation
 
-The repository directory is the skill. Clone it into your harness's skills directory and keep the folder name `lanshu-create-ai-presenter-video`, which the Agent Skills specification requires to match the skill `name`.
+The repository is the skill. Clone it into your client's skills directory and keep the folder name `lanshu-create-ai-presenter-video` so it matches the name in `SKILL.md`.
 
-| Harness | Skills directory | Explicit invocation |
-|---|---|---|
+| Client | Skills directory | Explicit invocation |
+| --- | --- | --- |
 | Claude Code | `~/.claude/skills/` or project-level `.claude/skills/` | `/lanshu-create-ai-presenter-video` |
 | Codex | `~/.codex/skills/` | `$lanshu-create-ai-presenter-video` |
-| Other Agent Skills clients | See the client's documentation, linked from the [client list](https://agentskills.io/clients) | Client-specific |
+| Other clients | See the [Agent Skills client list](https://agentskills.io/clients) | Client-specific |
 
-For example, with Claude Code:
+This command installs the skill for Codex.
 
 ```bash
 git clone https://github.com/cclank/lanshu-create-ai-presenter-video.git \
-  ~/.claude/skills/lanshu-create-ai-presenter-video
+  "$HOME/.codex/skills/lanshu-create-ai-presenter-video"
 ```
 
-Run `git pull` in the installed directory to update. If you use several harnesses, clone once into each skills directory.
+Run `git pull` inside the installed directory to update. For a tagged version or a ready-to-extract skill ZIP, see [GitHub Releases](https://github.com/cclank/lanshu-create-ai-presenter-video/releases) and the [changelog](CHANGELOG.md).
 
-Tagged versions and a ready-to-extract skill ZIP are available in [Releases](https://github.com/cclank/lanshu-create-ai-presenter-video/releases). See [CHANGELOG.md](CHANGELOG.md) for version history.
-
-**Agents without Agent Skills support.** Clone the repository anywhere, then start the session with:
-
-```text
-Read /path/to/lanshu-create-ai-presenter-video/SKILL.md and follow its workflow exactly.
-```
+You can also clone the repository anywhere and ask your agent to read and follow `/path/to/lanshu-create-ai-presenter-video/SKILL.md`.
 
 ## Quick start
 
-Most harnesses select the skill automatically from its description, so you can describe the video you want:
+Give your agent a topic or script. Attach a portrait for the presenter route, or name a visual style for the styled route.
+
+**AI presenter**
 
 ```text
-Turn this script and portrait into a 30-second 16:9 presenter video with live captions.
+Turn this script and authorized portrait into a 30-second 16:9 presenter video with synced captions and animated keywords.
 ```
 
-For a styled explainer you don't need to know the styles yet — ask, and the agent shows the twelve with pictures and
-recommends a few for your topic:
+**Styled explainer**
 
 ```text
-Make a 40-second explainer about RAG, no presenter. Which styles are there?
+Make a 16:9 animated explainer on KV cache in the chalkboard style. Show me the script before generating narration.
 ```
 
-Use the explicit invocation from the table above to guarantee selection. The skill works in the language of your request.
+<details>
+<summary>Run the scripts manually</summary>
 
-The agent runs the bundled scripts itself. To set up a job manually, point `SKILL_DIR` at your installation:
+Set `SKILL_DIR` to the directory containing `SKILL.md`.
 
 ```bash
-SKILL_DIR=~/.claude/skills/lanshu-create-ai-presenter-video
+SKILL_DIR="$HOME/.codex/skills/lanshu-create-ai-presenter-video"
+```
+
+**Create a presenter job.** Use the confirmation flags after checking the image rights and the presenter's age.
+
+```bash
+PRESENTER_JOB="$HOME/Videos/my-presenter-video"
 
 python3 "$SKILL_DIR/scripts/init_job.py" \
-  --job-dir ~/Videos/my-presenter-video \
-  --presenter-image ~/Pictures/presenter.png \
+  --job-dir "$PRESENTER_JOB" \
+  --presenter-image "$HOME/Pictures/presenter.png" \
   --topic "Context engineering in one minute" \
   --duration 60 \
   --aspect 9:16 \
@@ -199,141 +97,154 @@ python3 "$SKILL_DIR/scripts/init_job.py" \
   --adult-presenter-confirmed
 ```
 
-Complete the manual review and upload approvals in `job.json`, then run preflight:
+Record the manual review and upload approvals in `job.json` when obtained. Run preflight to see which inputs and approvals are ready. Use the state checker after recording the artifacts from each stage. [Presenter production guide](references/generation.md)
 
 ```bash
-python3 "$SKILL_DIR/scripts/preflight.py" ~/Videos/my-presenter-video/job.json
+python3 "$SKILL_DIR/scripts/preflight.py" "$PRESENTER_JOB/job.json"
+python3 "$SKILL_DIR/scripts/check_state.py" "$PRESENTER_JOB/job.json" --write
 ```
 
-After each stage, record its artifacts in `job.json` and let the checker compute the state:
+**Preview a styled explainer.** This example uses the bundled KV cache script. It builds a draft with estimated word timing and no voice generation.
 
 ```bash
-python3 "$SKILL_DIR/scripts/check_state.py" ~/Videos/my-presenter-video/job.json --write
+EXPLAINER_DIR="$SKILL_DIR/explainer"
+STYLED_JOB="$HOME/Videos/kv-cache-explainer"
+
+python3 "$SKILL_DIR/scripts/init_job.py" \
+  --job-dir "$STYLED_JOB" \
+  --route styled \
+  --explainer-style v8-chalkboard \
+  --topic "KV cache"
+
+cd "$STYLED_JOB"
+mkdir -p story
+cp "$EXPLAINER_DIR/stories/kv-cache/script.md" story/script.md
+python3 "$EXPLAINER_DIR/tools/story.py" story --dry
+bash "$EXPLAINER_DIR/tools/new_film.sh" v8-chalkboard story film
+(cd film && npx --yes hyperframes@0.8.81 preview)
 ```
 
-A styled explainer by hand, from a job directory (`X=$SKILL_DIR/explainer`):
+For a voiced film, run `story.py story` with MiniMax or `story.py story --audio narration.wav` with your own recording. The guide covers writing scenes in `film/beats.js`, reviewing the storyboard, and running `qa.py` and `render.sh`. [Styled production guide](references/styled-explainer.md)
 
-```bash
-python3 "$SKILL_DIR/scripts/init_job.py" --job-dir . --route styled --explainer-style v8-chalkboard --topic "RAG in 40 seconds"
-python3 "$X/tools/story.py" story              # story/script.md → voice + word times → story/story.json
-bash "$X/tools/new_film.sh" v8-chalkboard story film   # a playable draft; perform each line in film/beats.js
-python3 "$X/tools/qa.py" film qa/film          # check, stillness, snapshots, cover
-bash "$X/tools/render.sh" film rag outputs     # master, share copy, subtitles
-```
+</details>
 
-## Scripts
+## Style gallery
 
-| Script | Purpose |
-|---|---|
-| `init_job.py` | Creates a self-contained job directory, copies all inputs into it, and records job-relative paths. |
-| `preflight.py` | Validates inputs, manual review, and approvals; separates local errors from remote-generation blockers. |
-| `plan_segments.py` | Splits the locked narration at real ASR pauses when a provider caps request or reference-audio duration. |
-| `check_state.py` | Computes the evidence-backed production state and exits non-zero when the recorded state overclaims. |
-| `finalize_delivery.sh` | Builds master and share encodes, verifies full decode, delivered loudness, and black or frozen frames, then publishes them with a contact sheet and report. |
+Both previews use the same KV cache topic. Each style has a starter, a reusable kit, and an example project. All twelve include word-timed captions, chapter labels, a closing line, and a one-frame recap.
 
-## Explainer tools
+### Nine visual styles
 
-Under `explainer/tools/`, used on the styled route:
+Editorial, tech HUD, notebook, paper pop-up, pop comic, 3D one-take, drafting sheet, chalkboard, and clay town. The grid shows the same moment in all nine looks.
 
-| Tool | Purpose |
-|---|---|
-| `story.py` | `script.md` → MiniMax voice per line with the engine's word timestamps → `story.json`; `--audio` for your own narration, `--dry` for a silent draft, `--check` for the plan and estimated length. |
-| `new_film.sh` / `new_topic.sh` | A playable film from a style's starter (or drafts in the nine visual styles at once). |
-| `docs.py` | Script, beat sheet, timeline, and a storyboard table from the story. |
-| `qa.py` | `hyperframes check`, snapshots at every chapter, stillness pairs, a cover frame, and a composition report. |
-| `render.sh` | Render, finalize with `finalize_delivery.sh`, write subtitles (SRT); `DRAFT=1` makes a 720p review copy for a phone. |
-| `srt.py`, `still_grid.py`, `fonts.py`, `sync.sh`, `stamp.py` | Subtitles, a 3×3 style comparison still, font subsets, and project plumbing. |
+[![The same moment of the KV cache explainer in nine visual styles](explainer/gallery/nine-styles-kv-cache.jpg)](explainer/STYLES.md)
 
-## Reference guides
+### Three narrative styles
 
-The agent loads each guide only when it reaches the matching stage, which keeps context usage low.
+**Derivation** builds the explanation on one canvas. **Casefile** follows the evidence to a cause. **Sitcom** uses an everyday scene to make the concept concrete.
 
-| Guide | Covers |
-|---|---|
-| [`generation.md`](references/generation.md) | Intake, script and narration, capability selection, billing gates, segment planning, presenter prompts |
-| [`editing.md`](references/editing.md) | Timeline contract, segment seams, openings and closes, captions, keyword graphics, preview and export |
-| [`qa-recovery.md`](references/qa-recovery.md) | Acceptance gates and recovery playbooks for lip-sync, identity, seams, loudness, and remote tasks |
-| [`styled-explainer.md`](references/styled-explainer.md) | The styled explainer route: story pipeline, style starters, performing scenes, and an optional method for adding a digital human |
-| [`explainer/STYLES.md`](explainer/STYLES.md) | The style menu and gallery, common words → styles, and how to write the narration for each style |
-| [`explainer/KITS.md`](explainer/KITS.md) | The kit contract, the aesthetic baseline, the starters, and the tools |
-| [`explainer/GOTCHAS.md`](explainer/GOTCHAS.md) | HyperFrames pitfalls met while building the styles |
+[![The KV cache topic told as a derivation, a casefile, and a sitcom](explainer/gallery/three-narrative-styles-kv-cache.jpg)](explainer/STYLES.md)
 
-## Repository layout
+[Full style guide](explainer/STYLES.md) · [KV cache example projects](explainer/examples/README.md)
 
-```text
-lanshu-create-ai-presenter-video/
-├── SKILL.md                 # Skill entry point: metadata and workflow
-├── README.md
-├── README.zh-CN.md
-├── agents/
-│   └── openai.yaml          # Codex display metadata; other harnesses ignore it
-├── assets/
-│   └── job.template.json    # Job manifest template
-├── references/              # Stage guides loaded on demand
-├── scripts/                 # Job setup, gates, segment planning, delivery
-├── explainer/               # Styled explainer engine: core runtime, twelve style kits + starters, tools, examples
-│   ├── STYLES.md            # Style chooser with the gallery
-│   ├── KITS.md              # The kit contract and tools
-│   ├── kits/<style>/        # One look per style, and starter/ = the film minus the topic
-│   ├── stories/             # Example scripts (KV cache) and a draft test story
-│   ├── examples/kv-cache/   # The finished KV cache film in each style
-│   └── tools/               # story.py, new_film.sh, qa.py, render.sh, srt.py, …
-└── tests/
-    ├── smoke.sh             # End-to-end test with synthetic media
-    └── explainer_smoke.sh   # Styled route: intake, story, starter sync, state
-```
+## How it works
+
+- **AI presenter.** Lock the script and narration, run a low-cost presenter pilot, then generate and edit the full video. For providers with duration caps, the segment planner splits narration at real pauses. The agent records the selected provider, model, parameters, and task IDs for each capability.
+- **Styled explainer.** Pick a style before writing the script, time it to the narration, and build a playable draft from the starter. Use the storyboard and word timings to animate each spoken idea, then check and render the film.
+
+The approved narration sets the timing for lip-sync, captions, graphics, and cuts. `check_state.py` reads job artifacts to determine which production stage has passed.
+
+| Stage | Evidence |
+| --- | --- |
+| `intake` | Job manifest |
+| `content_locked` | Passing preflight report, script, and beat sheet |
+| `audio_locked` | Decodable narration and timing evidence |
+| `visual_plan_locked` | Timeline, storyboard, and approved plan |
+| `presenter_generated` | Selected presenter video or performed styled film, plus visual review |
+| `composition_checked` | Composition report |
+| `rendered` | Decodable render with video and audio |
+| `verified` | Master, share copy, and delivery report with passing loudness |
+
+On the styled route, audio lock requires narration and a matching `story.json` with word timing. Both encodes undergo full decode and loudness checks. The delivery report records black or frozen frames in the master, and the delivery includes a contact sheet. The styled workflow also exports SRT subtitles and a cover frame.
 
 ## Defaults
 
 | Setting | Default |
-|---|---|
-| Format | 9:16, 1080×1920, 30 fps (styled explainer: 16:9, 1920×1080, 30 fps) |
-| Duration | 45–75 seconds from a topic; natural length for a supplied script |
-| Voice | Stock voice unless an authorized sample is provided; styled route: MiniMax `Chinese (Mandarin)_Reliable_Executive`, speed set per style |
-| Structure | Hook, 2–4 content beats, concise close |
-| Music and call to action | Off unless requested |
-| Loudness | −16 LUFS ±0.5 LU, true peak ≤ −1 dBTP; override with `PROGRAM_LUFS` |
+| --- | --- |
+| Format | Presenter 9:16 at 1080 × 1920. Styled 16:9 at 1920 × 1080. Both 30 fps. |
+| Duration | 45–75 seconds from a topic. A supplied script follows its natural length. |
+| Voice | Stock voice or an authorized sample for the presenter route. Styled uses MiniMax `Chinese (Mandarin)_Reliable_Executive` by default, with speed set per style. |
+| Structure | A hook, 2–4 content beats, and a concise close. Music and calls to action are opt-in. |
+| Loudness | −16 LUFS ±0.5 LU, with true peak ≤ −1 dBTP. Set `PROGRAM_LUFS` to change the target. |
 
-## Safety and cost controls
+## Cost and privacy
 
-- Image rights and adult-presenter status are confirmed before any upload.
-- Voice cloning requires explicit authorization, and a voice is never inferred from an image.
-- Before the first paid call, the agent states the uploads, requested seconds, known price, pilot size, and retry ceiling.
-- When a provider caps duration, the quote uses the total requested seconds from the segment plan.
-- Interrupted remote tasks are polled by their saved task ID before any resubmission.
-- Work stops after three rejected paid candidates, with a summary of the recurring failure and remaining options.
-- On the styled route the only paid call is the voice — one call per line, cached, so an edit re-voices only that line; drafts in the nine visual styles cost nothing more.
+- The agent confirms image rights, adult status, upload approval, and any voice-cloning authorization before the relevant remote action.
+- Before a paid call, the agent lists the assets to upload, requested units, known price, pilot size, and retry limit. Segment quotes use the total requested seconds. Interrupted requests are checked by task ID before resubmission, and the agent stops after three rejected paid candidates.
+- Styled narration is cached per line. Editing one line regenerates just that line. Once narration is locked, comparing the nine visual styles requires no additional voice calls.
+- Request records omit credentials and temporary URLs. Preflight and delivery reports use file names or job-relative paths. The styled route fetches font subsets from Google Fonts and jsDelivr, and keeps QA snapshots local with `--describe false`.
 
-## Privacy
+## Reference guides
 
-- The repository contains no API keys, access tokens, signed URLs, or user media.
-- Provider request records are stored without credentials or expiring URLs.
-- Preflight and delivery reports store file names or job-relative paths only, never absolute machine paths.
-- The styled explainer downloads font subsets from Google Fonts and jsDelivr (only the characters used); word timing
-  comes from the voice provider's own timestamps, so no speech model is installed; snapshots are taken with
-  `--describe false`, so frames stay local.
+| Guide | What it covers |
+| --- | --- |
+| [Generation](references/generation.md) | Intake, script, narration, provider selection, presenter prompts, billing, and segment planning |
+| [Editing](references/editing.md) | Timeline, segment seams, captions and keyword graphics, cover, and export |
+| [QA and recovery](references/qa-recovery.md) | Acceptance checks and fixes for lip-sync, identity, seams, loudness, and remote tasks |
+| [Styled explainer](references/styled-explainer.md) | Story pipeline, scene animation, review, render, and adding a presenter to a styled film |
+| [Style kits](explainer/KITS.md) · [HyperFrames notes](explainer/GOTCHAS.md) | Starter format, tooling, and rendering pitfalls |
+
+### Main scripts
+
+| Script | Purpose |
+| --- | --- |
+| [`init_job.py`](scripts/init_job.py) | Initializes a self-contained job directory and copies inputs |
+| [`preflight.py`](scripts/preflight.py) | Checks inputs, manual review, and remote-generation approvals |
+| [`plan_segments.py`](scripts/plan_segments.py) | Splits narration at suitable pauses when requests have a duration cap |
+| [`check_state.py`](scripts/check_state.py) | Computes the current stage from recorded artifacts |
+| [`finalize_delivery.sh`](scripts/finalize_delivery.sh) | Builds and checks the master and share copies, contact sheet, and delivery report |
+
+The [styled tools](explainer/tools/) include `story.py` for narration and word timing, `new_film.sh` and `new_topic.sh` for drafts, `docs.py` for production documents, `qa.py` for composition and stillness checks, and `render.sh` for video and subtitles.
+
+### Repository layout
+
+```text
+SKILL.md        Skill entry point
+agents/         Codex display metadata
+assets/         Job manifest template
+references/     Production guides
+scripts/        Job setup, verification, and delivery
+explainer/      HyperFrames runtime, style kits, starters, stories, and examples
+tests/          Offline smoke tests and narration timing checks
+```
 
 ## Testing
 
-The smoke test drives a synthetic job from `intake` to `verified` without calling any remote service. It requires FFmpeg, `jq`, and Python 3.9+:
+Run both smoke tests using synthetic media, without calling generation providers. They require Python 3.9+, FFmpeg, and `jq`. The styled test also uses Node.js and `rsync`.
 
 ```bash
 bash tests/smoke.sh
-bash tests/explainer_smoke.sh   # styled explainer; also needs Node.js and rsync
+bash tests/explainer_smoke.sh
 ```
 
-CI runs metadata validation, a portability check, syntax checks for the explainer engine, and both smoke tests on every push and pull request.
+CI runs metadata, portability, and source checks alongside both smoke tests on pushes and pull requests.
 
 ## Contributing
 
-Issues and pull requests are welcome. Reports from different harnesses and providers are especially valuable, as are improvements to the workflow, compatibility, and quality checks. To add another explainer style, follow the kit contract in [`explainer/KITS.md`](explainer/KITS.md) and the starter brief in [`explainer/STARTER-BRIEF.md`](explainer/STARTER-BRIEF.md).
+Issues and pull requests are welcome, especially compatibility reports and improvements to production or QA. To add a style, review the [kit contract](explainer/KITS.md) and [starter brief](explainer/STARTER-BRIEF.md).
 
 ## Author
 
-Created and maintained by **岚叔 (Lanshu)**. Follow on X for updates and new AI video workflows:
-
-[![Follow on X](https://img.shields.io/badge/Follow_on_X-@LufzzLiz-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/LufzzLiz)
+Created and maintained by **岚叔 (Lanshu)**. [@LufzzLiz on X](https://x.com/LufzzLiz)
 
 ## License
 
-Released under the [MIT License](LICENSE). Fonts, libraries, and services the explainer engine uses are listed in [`explainer/THIRD_PARTY.md`](explainer/THIRD_PARTY.md).
+[MIT License](LICENSE) · [Third-party fonts, libraries, and services](explainer/THIRD_PARTY.md)
+
+[skill-badge]: https://img.shields.io/badge/Agent_Skill-SKILL.md-111827
+[release-badge]: https://img.shields.io/github/v/release/cclank/lanshu-create-ai-presenter-video
+[latest-release]: https://github.com/cclank/lanshu-create-ai-presenter-video/releases/latest
+[ci-badge]: https://github.com/cclank/lanshu-create-ai-presenter-video/actions/workflows/validate.yml/badge.svg
+[ci]: https://github.com/cclank/lanshu-create-ai-presenter-video/actions/workflows/validate.yml
+[license-badge]: https://img.shields.io/badge/License-MIT-F4C430.svg
+[stars-badge]: https://img.shields.io/github/stars/cclank/lanshu-create-ai-presenter-video?style=flat
+[stargazers]: https://github.com/cclank/lanshu-create-ai-presenter-video/stargazers
